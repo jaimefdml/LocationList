@@ -38,8 +38,6 @@ public class AddElementActivity extends Activity {
 	 * 
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
-	//VIVA GIT!!
-	//Me cago en GIT!!
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

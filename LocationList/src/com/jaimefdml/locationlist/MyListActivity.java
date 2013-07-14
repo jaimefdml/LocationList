@@ -48,7 +48,6 @@ public class MyListActivity extends Activity implements
 	 * 
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
-	//Git es incomprensible. Me voy a enchufar un manual, ya!
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
