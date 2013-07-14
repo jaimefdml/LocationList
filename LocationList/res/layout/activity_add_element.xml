@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".AddElementActivity" >
+
+    <EditText
+        android:id="@+id/etNewName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/Name" />
+
+    <EditText
+        android:id="@+id/etNewDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etNewName"
+        android:hint="@string/Description" />
+
+    <Button
+        android:id="@+id/buttonLocate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/etNewDescription"
+        android:text="@string/Locate"
+        android:onClick="onLocateClick" />
+
+    <TextView
+        android:id="@+id/tvRadius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonLocate"
+        android:text="@string/Radius" />
+
+    <NumberPicker
+        android:id="@+id/numberPickerKm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvRadius" 
+        />
+    
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/Save"
+        android:onClick="onSaveClick" />
+
+
+</RelativeLayout>

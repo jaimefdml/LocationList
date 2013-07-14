@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LocationList</string>
+    <string name="action_settings">Settings</string>
+    <string name="AddElement">Añadir Elemento</string>
+    <string name="On">ON</string>
+    <string name="Off">OFF</string>
+    <string name="Name">Inserta un nombre</string>
+    <string name="Description">Inserta una descripción</string>
+    <string name="Locate">Localizar</string>
+    <string name="Save">Guardar</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="Radius">Radio [Km]</string>
+
+</resources>
