@@ -84,7 +84,6 @@ public class LocationService extends IntentService {
 				BaseTodoList.KEY_NAME,
 				BaseTodoList.KEY_LATITUDE,
 				BaseTodoList.KEY_LONGITUDE,
-				BaseTodoList.KEY_KM,
 				BaseTodoList.KEY_BASKET
 				};
 		Cursor cursor = cr.query(TodoListContentProvider.CONTENT_URI,
@@ -108,7 +107,7 @@ public class LocationService extends IntentService {
 				Cursor sameBasketCursor = cr.query(TodoListContentProvider.CONTENT_URI,
 						new String[] {BaseTodoList.KEY_NAME}, 
 						BaseTodoList.KEY_BASKET + "=?",
-						new String[] {Integer.toString(cursor.getInt(5))}, 
+						new String[] {Integer.toString(cursor.getInt(4))}, 
 						null);
 				
 				while(sameBasketCursor.moveToNext()){

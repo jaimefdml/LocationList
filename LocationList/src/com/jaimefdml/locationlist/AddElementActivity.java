@@ -1,14 +1,15 @@
 package com.jaimefdml.locationlist;
 
-import com.jaimefdml.locationlist.TodoListContentProvider.BaseTodoList;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,7 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
-import android.location.*;
+
+import com.jaimefdml.locationlist.TodoListContentProvider.BaseTodoList;
 
 public class AddElementActivity extends Activity {
 	EditText etNewName;
@@ -29,7 +31,6 @@ public class AddElementActivity extends Activity {
 	Double longitude = 0.0;
 	int result = RESULT_CANCELED;
 	int rcMapActivity = 0;
-	int numKm = 1;
 	int basketNum = 0;
 
 	/*
@@ -46,9 +47,7 @@ public class AddElementActivity extends Activity {
 		this.etNewDescription = (EditText) findViewById(R.id.etNewDescription);
 		this.buttonLocate = (Button) findViewById(R.id.buttonLocate);
 		this.buttonSave = (Button) findViewById(R.id.buttonSave);
-		this.kmPicker = (NumberPicker) findViewById(R.id.numberPickerKm);
-		kmPicker.setMaxValue(10);
-		kmPicker.setMinValue(1);
+		
 
 	}
 
@@ -83,25 +82,33 @@ public class AddElementActivity extends Activity {
 	}
 
 	public void onLocateClick(View view) {
-		// Checks GPS, Wifi and so on:
+		// Checks GPS
 		LocationManager lm = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
 		boolean gps_on = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		boolean wifi_on = lm
-				.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
 		if (!gps_on) {
 			// Activate GPS
 			// Should throw a Dialog, and open the settings activity.
 			DialogGPS dialog = new DialogGPS();
 			dialog.show(getFragmentManager(), "GPS ACTIVATION");
+		}
 
-		} else if (!wifi_on) {
+		// Checks WiFi
+		ConnectivityManager cm = (ConnectivityManager) this
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo wifiinfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		boolean wifi_on = wifiinfo.isAvailable();
+		
+		if (gps_on && !wifi_on) {
 			// Activate WIFI
 			// Should throw a Dialog, and open the settings activity.
-			// For the moment, just a Toast
-			Toast.makeText(this, "Please, activate your WiFi",
-					Toast.LENGTH_LONG).show();
-		} else {
+			DialogWifi dialogwifi = new DialogWifi();
+			dialogwifi.show(getFragmentManager(), "DIALOG WIFI");
+		}
+		
+		//If GPS and WiFi have been enabled, launches the Map Activity.
+		if (gps_on && wifi_on) {
 			// Launches the map activity which should allow the user
 			// to pick a location.
 			Intent intent = new Intent(this, MapActivity.class);
@@ -150,7 +157,6 @@ public class AddElementActivity extends Activity {
 				.getText().toString());
 		values.put(BaseTodoList.KEY_LATITUDE, this.latitude);
 		values.put(BaseTodoList.KEY_LONGITUDE, this.longitude);
-		values.put(BaseTodoList.KEY_KM, this.kmPicker.getValue());
 		values.put(BaseTodoList.KEY_BASKET, this.basketNum);
 
 		Uri insertedUri = cr

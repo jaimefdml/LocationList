@@ -20,7 +20,6 @@ public class ListLocationOpenHelper extends SQLiteOpenHelper {
 			+ " TEXT," + BaseTodoList.KEY_DESCRIPTION + " TEXT,"
 			+ BaseTodoList.KEY_LATITUDE + " INTEGER,"
 			+ BaseTodoList.KEY_LONGITUDE + " INTEGER, "
-			+ BaseTodoList.KEY_KM + " INTEGER,"
 			+ BaseTodoList.KEY_BASKET + " INTEGER);";
 
 	public ListLocationOpenHelper(Context context, String name,

@@ -28,15 +28,6 @@ public class DialogGPS extends DialogFragment {
 					}
 
 				});
-		builder.setNegativeButton(R.string.buttonNo_dialog_gps,
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Doesn't make anything
-					}
-
-				});
 
 		Dialog dialog = builder.create();
 		return dialog;

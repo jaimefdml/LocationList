@@ -30,19 +30,6 @@
         android:text="@string/Locate"
         android:onClick="onLocateClick" />
 
-    <TextView
-        android:id="@+id/tvRadius"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonLocate"
-        android:text="@string/Radius" />
-
-    <NumberPicker
-        android:id="@+id/numberPickerKm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvRadius" 
-        />
     
     <Button
         android:id="@+id/buttonSave"

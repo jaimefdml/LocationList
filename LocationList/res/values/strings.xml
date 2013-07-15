@@ -20,4 +20,9 @@
         Do you want to activate it?</string>
 	<string name="buttonOk_dialog_gps">OK</string>
 	<string name="buttonNo_dialog_gps">No, thanks</string>
+	<string name="title_dialog_WiFi">Activate WiFi</string>
+    <string name="message_dialog_WiFi">You need to activate the WiFi to provide location.
+        Do you want to activate it?</string>
+	<string name="buttonOk_dialog_WiFi">OK</string>
+	<string name="buttonNo_dialog_WiFi">No, thanks</string>
 </resources>

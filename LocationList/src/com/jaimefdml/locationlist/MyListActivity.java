@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -126,25 +128,38 @@ public class MyListActivity extends Activity implements
 	public void onSwitchServiceClick(View view) {
 		if (switchService.isChecked()) {
 			// When it is activated: throw the service
-			// Toast.makeText(this, "Activated", Toast.LENGTH_LONG).show();
+			// Checks GPS
 			LocationManager lm = (LocationManager) this
 					.getSystemService(Context.LOCATION_SERVICE);
 			boolean gps_on = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			boolean wifi_on = lm
-					.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-			if (!gps_on) {
+
+			if (!gps_on ) {
 				// Activate GPS
 				// Should throw a Dialog, and open the settings activity.
+				if (switchService.isChecked())
+					switchService.setChecked(false);
 				DialogGPS dialog = new DialogGPS();
 				dialog.show(getFragmentManager(), "GPS ACTIVATION");
-			} else if (!wifi_on) {
+			}
+
+			// Checks WiFi
+			ConnectivityManager cm = (ConnectivityManager) this
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo wifiinfo = cm
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			boolean wifi_on = wifiinfo.isAvailable();
+			if (gps_on && !wifi_on) {
 				// Activate WIFI
 				// Should throw a Dialog, and open the settings activity.
-				// For the moment, just a Toast
-				Toast.makeText(this, "Please, activate your WiFi",
-						Toast.LENGTH_LONG).show();
-				this.switchService.setChecked(false);
-			} else {
+				if (switchService.isChecked())
+					switchService.setChecked(false);
+				DialogWifi dialogwifi = new DialogWifi();
+				dialogwifi.show(getFragmentManager(), "DIALOG WIFI");
+
+			}
+
+			// If GPS and WiFi have been enabled, starts the service.
+			if (gps_on && wifi_on) {
 				// Throw service with all the providers already activated
 				Intent intent = new Intent(this, LocationService.class);
 				startService(intent);

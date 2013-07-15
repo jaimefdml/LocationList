@@ -60,10 +60,7 @@
 
         <service android:name="com.jaimefdml.locationlist.LocationService" />
 
-        <activity
-            android:name="com.jaimefdml.locationlist.DialogGPS"
-            android:label="@string/title_activity_dialog_gps" >
-        </activity>
+       
     </application>
 
 </manifest>

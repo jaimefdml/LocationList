@@ -24,7 +24,6 @@ public class TodoListContentProvider extends ContentProvider {
 		public static final String KEY_DESCRIPTION = "Description";
 		public static final String KEY_LATITUDE = "Latitude";
 		public static final String KEY_LONGITUDE = "Altitude";
-		public static final String KEY_KM="Km";
 		public static final String KEY_BASKET="Basket";
 
 	}
