@@ -13,5 +13,11 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="Radius">Radio [Km]</string>
-
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_dialog_gps">DialogGPS</string>
+    <string name="title_dialog_GPS">Activate GPS</string>
+    <string name="message_dialog_GPS">You need to activate the GPS to provide location.
+        Do you want to activate it?</string>
+	<string name="buttonOk_dialog_gps">OK</string>
+	<string name="buttonNo_dialog_gps">No, thanks</string>
 </resources>

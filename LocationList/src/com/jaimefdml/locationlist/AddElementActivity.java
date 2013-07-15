@@ -30,7 +30,7 @@ public class AddElementActivity extends Activity {
 	int result = RESULT_CANCELED;
 	int rcMapActivity = 0;
 	int numKm = 1;
-	int basketNum=0;
+	int basketNum = 0;
 
 	/*
 	 * Gets the handler of all the UI widgets: two edittexts and two buttons.
@@ -77,7 +77,7 @@ public class AddElementActivity extends Activity {
 						Toast.LENGTH_LONG).show();
 				latitude = data.getDoubleExtra("Latitude", 0.0);
 				longitude = data.getDoubleExtra("Longitude", 0.0);
-				
+
 			}
 		}
 	}
@@ -92,9 +92,9 @@ public class AddElementActivity extends Activity {
 		if (!gps_on) {
 			// Activate GPS
 			// Should throw a Dialog, and open the settings activity.
-			// For the moment, just a Toast
-			Toast.makeText(this, "Please, activate your GPS", Toast.LENGTH_LONG)
-					.show();
+			DialogGPS dialog = new DialogGPS();
+			dialog.show(getFragmentManager(), "GPS ACTIVATION");
+
 		} else if (!wifi_on) {
 			// Activate WIFI
 			// Should throw a Dialog, and open the settings activity.
@@ -112,47 +112,45 @@ public class AddElementActivity extends Activity {
 
 	public void onSaveClick(View view) {
 		ContentResolver cr = getContentResolver();
-		Cursor curBaskets = cr.query(TodoListContentProvider.CONTENT_URI, new String[] {
-				BaseTodoList.KEY_LATITUDE,
-				BaseTodoList.KEY_LONGITUDE,
-				BaseTodoList.KEY_BASKET }, null, null,
-				BaseTodoList.KEY_BASKET);
-		//Puede lanzar una excepción si la base de datos está vacía??
+		Cursor curBaskets = cr.query(TodoListContentProvider.CONTENT_URI,
+				new String[] { BaseTodoList.KEY_LATITUDE,
+						BaseTodoList.KEY_LONGITUDE, BaseTodoList.KEY_BASKET },
+				null, null, BaseTodoList.KEY_BASKET);
+		// Puede lanzar una excepción si la base de datos está vacía??
 		boolean basketIsSet = false;
-		while(curBaskets.moveToNext()){
-			// Si la distancia entre la nueva compra y otra que ya se quiera hacer
+		while (curBaskets.moveToNext()) {
+			// Si la distancia entre la nueva compra y otra que ya se quiera
+			// hacer
 			// es menor de
 			// X km, se añaden a la misma cesta
 			float[] results = new float[3];
-			Location.distanceBetween(latitude, longitude, curBaskets.getDouble(0), curBaskets.getDouble(1), results);
-			//Lets say a radius of 2 km
-			//Should be a settings parameter
-			//If the new place is near another one already pointed, both must be
-			//in the same basket.
-			if(results[0]<2000){
+			Location.distanceBetween(latitude, longitude,
+					curBaskets.getDouble(0), curBaskets.getDouble(1), results);
+			// Lets say a radius of 2 km
+			// Should be a settings parameter
+			// If the new place is near another one already pointed, both must
+			// be
+			// in the same basket.
+			if (results[0] < 2000) {
 				this.basketNum = curBaskets.getInt(2);
-				//To finish looking around the cursor.
+				// To finish looking around the cursor.
 				curBaskets.moveToLast();
-				basketIsSet=true;
-				
+				basketIsSet = true;
+
 			}
-			if(curBaskets.isLast()&& !basketIsSet)
-				this.basketNum = curBaskets.getInt(2)+1;
-			
+			if (curBaskets.isLast() && !basketIsSet)
+				this.basketNum = curBaskets.getInt(2) + 1;
+
 		}
 		// Should insert in the content provider a row.
 		// Creates the ContentValues bundle to insert in the DB.
 		ContentValues values = new ContentValues();
-		values.put(BaseTodoList.KEY_NAME,
-				this.etNewName.getText().toString());
-		values.put(BaseTodoList.KEY_DESCRIPTION,
-				this.etNewDescription.getText().toString());
-		values.put(BaseTodoList.KEY_LATITUDE,
-				this.latitude);
-		values.put(BaseTodoList.KEY_LONGITUDE,
-				this.longitude);
-		values.put(BaseTodoList.KEY_KM,
-				this.kmPicker.getValue());
+		values.put(BaseTodoList.KEY_NAME, this.etNewName.getText().toString());
+		values.put(BaseTodoList.KEY_DESCRIPTION, this.etNewDescription
+				.getText().toString());
+		values.put(BaseTodoList.KEY_LATITUDE, this.latitude);
+		values.put(BaseTodoList.KEY_LONGITUDE, this.longitude);
+		values.put(BaseTodoList.KEY_KM, this.kmPicker.getValue());
 		values.put(BaseTodoList.KEY_BASKET, this.basketNum);
 
 		Uri insertedUri = cr

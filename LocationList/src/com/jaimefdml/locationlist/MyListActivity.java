@@ -1,7 +1,5 @@
 package com.jaimefdml.locationlist;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
@@ -128,33 +126,33 @@ public class MyListActivity extends Activity implements
 	public void onSwitchServiceClick(View view) {
 		if (switchService.isChecked()) {
 			// When it is activated: throw the service
-			//Toast.makeText(this, "Activated", Toast.LENGTH_LONG).show();
+			// Toast.makeText(this, "Activated", Toast.LENGTH_LONG).show();
 			LocationManager lm = (LocationManager) this
 					.getSystemService(Context.LOCATION_SERVICE);
 			boolean gps_on = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			boolean wifi_on = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-			if(!gps_on){
-				//Activate GPS
-				//Should throw a Dialog, and open the settings activity.
-				//For the moment, just a Toast
-				Toast.makeText(this, "Please, activate your GPS", Toast.LENGTH_LONG).show();
+			boolean wifi_on = lm
+					.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+			if (!gps_on) {
+				// Activate GPS
+				// Should throw a Dialog, and open the settings activity.
+				DialogGPS dialog = new DialogGPS();
+				dialog.show(getFragmentManager(), "GPS ACTIVATION");
+			} else if (!wifi_on) {
+				// Activate WIFI
+				// Should throw a Dialog, and open the settings activity.
+				// For the moment, just a Toast
+				Toast.makeText(this, "Please, activate your WiFi",
+						Toast.LENGTH_LONG).show();
 				this.switchService.setChecked(false);
-			}
-			else if (!wifi_on){
-				//Activate WIFI
-				//Should throw a Dialog, and open the settings activity.
-				//For the moment, just a Toast
-				Toast.makeText(this, "Please, activate your WiFi", Toast.LENGTH_LONG).show();
-				this.switchService.setChecked(false);
-			}else{
-				//Throw service with all the providers already activated
-				Intent intent = new Intent(this,LocationService.class);
+			} else {
+				// Throw service with all the providers already activated
+				Intent intent = new Intent(this, LocationService.class);
 				startService(intent);
 			}
 		}
 		if (!switchService.isChecked()) {
 			// When it is deactivated: finish the service.
-			//Toast.makeText(this, "Not Activated", Toast.LENGTH_LONG).show();
+			// Toast.makeText(this, "Not Activated", Toast.LENGTH_LONG).show();
 		}
 	}
 
