@@ -14,6 +14,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -21,7 +22,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.jaimefdml.locationlist.TodoListContentProvider.BaseTodoList;
 
@@ -101,6 +101,21 @@ public class MyListActivity extends Activity implements
 	}
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.settings:
+			Intent settingsIntent = new Intent(this, SettingsActivity.class);
+			startActivity(settingsIntent);
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
+
+		}
+		
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		if (requestCode == requestCodeOnAddElement) {
@@ -133,7 +148,7 @@ public class MyListActivity extends Activity implements
 					.getSystemService(Context.LOCATION_SERVICE);
 			boolean gps_on = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-			if (!gps_on ) {
+			if (!gps_on) {
 				// Activate GPS
 				// Should throw a Dialog, and open the settings activity.
 				if (switchService.isChecked())

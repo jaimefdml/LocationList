@@ -18,11 +18,17 @@
     <string name="title_dialog_GPS">Activate GPS</string>
     <string name="message_dialog_GPS">You need to activate the GPS to provide location.
         Do you want to activate it?</string>
-	<string name="buttonOk_dialog_gps">OK</string>
-	<string name="buttonNo_dialog_gps">No, thanks</string>
-	<string name="title_dialog_WiFi">Activate WiFi</string>
+    <string name="buttonOk_dialog_gps">OK</string>
+    <string name="buttonNo_dialog_gps">No, thanks</string>
+    <string name="title_dialog_WiFi">Activate WiFi</string>
     <string name="message_dialog_WiFi">You need to activate the WiFi to provide location.
         Do you want to activate it?</string>
-	<string name="buttonOk_dialog_WiFi">OK</string>
-	<string name="buttonNo_dialog_WiFi">No, thanks</string>
+    <string name="buttonOk_dialog_WiFi">OK</string>
+    <string name="buttonNo_dialog_WiFi">No, thanks</string>
+    <string name="notifradiokey">Notification Radio</string>
+    <string name="notifradiosum">Radio around the location you are notified.</string>
+    <string name="basketradiokey">Basket radio</string>
+    <string name="basketradiosum">Location within this radio are in the same basket</string>
+    <string name="settings">Settings</string>
+
 </resources>

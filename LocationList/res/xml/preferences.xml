@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <ListPreference
+        android:key="NotifRadioKey"
+        android:title="@string/notifradiokey"
+        android:summary="@string/notifradiosum"
+        android:entries="@array/notificationradioentries"
+        android:entryValues="@array/notificationradiovalues"
+        android:defaultValue="2" />
+    <ListPreference
+        android:key="BasketRadioKey"
+        android:title="@string/basketradiokey"
+        android:summary="@string/basketradiosum"
+        android:entries="@array/basketradioentries"
+        android:entryValues="@array/basketradiovalues"
+        android:defaultValue="1" />
+    
+    
+    
+    
+</PreferenceScreen>
+    

@@ -7,11 +7,13 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -88,7 +90,8 @@ public class LocationService extends IntentService {
 				};
 		Cursor cursor = cr.query(TodoListContentProvider.CONTENT_URI,
 				projection, null, null, BaseTodoList.KEY_BASKET);
-		
+		SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(this);
+		String notifradio = sharedpref.getString(SettingsActivity.KEY_NOTIFICATION_RADIO, "2");
 		
 		
 		while (cursor.moveToNext()) {
@@ -100,7 +103,7 @@ public class LocationService extends IntentService {
 			Location.distanceBetween(currentLatitude, currentLongitude, cursorLat, cursorLon, results);
 			Float distance = results[0];
 			//If you are nearer than specified distance, throw the notification
-			if (distance < 4000) {
+			if (distance < Integer.parseInt(notifradio)) {
 				// Throw status bar notifications
 				// Showing has to buy KEY_NAME.
 				// For the moment, just a Toast.
