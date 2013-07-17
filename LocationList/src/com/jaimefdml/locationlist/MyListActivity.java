@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
@@ -70,6 +71,37 @@ public class MyListActivity extends Activity implements
 	public void onResume() {
 		super.onResume();
 
+		this.lvListToDo.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				ContentResolver cr = getContentResolver();
+
+				String uri = TodoListContentProvider.uri + "/"
+						+ Long.toString(id);
+				Uri locator = Uri.parse(uri);
+				String[] projection = { BaseTodoList.KEY_NAME,
+						BaseTodoList.KEY_DESCRIPTION,
+						BaseTodoList.KEY_LATITUDE, BaseTodoList.KEY_LONGITUDE };
+
+				Cursor cursor = cr.query(locator, projection, null, null, null);
+				if (cursor.getCount() == 1 && cursor.moveToFirst()) {
+					Intent intent = new Intent(getApplication(),
+							ItemDetailsActivity.class);
+					
+					intent.putExtra("itemName", cursor.getString(0));
+					intent.putExtra("itemDescription", cursor.getString(1));
+					intent.putExtra("itemLatitude", cursor.getDouble(2));
+					intent.putExtra("itemLongitude", cursor.getDouble(3));
+					cursor.close();
+					startActivity(intent);
+
+				}
+			}
+
+		});
+
 		this.lvListToDo
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -112,7 +144,7 @@ public class MyListActivity extends Activity implements
 			return super.onOptionsItemSelected(item);
 
 		}
-		
+
 	}
 
 	@Override

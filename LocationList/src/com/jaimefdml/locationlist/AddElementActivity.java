@@ -95,6 +95,11 @@ public class AddElementActivity extends Activity {
 				longitude = data.getDoubleExtra("Longitude", 0.0);
 
 			}
+			else if (resultCode==RESULT_CANCELED){
+				Toast.makeText(this, "Location failed", Toast.LENGTH_LONG).show();
+			}
+		}else{
+			Toast.makeText(this, "Where the f**k did you come from?", Toast.LENGTH_LONG).show();
 		}
 	}
 

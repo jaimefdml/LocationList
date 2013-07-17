@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+    <EditText 
+        android:id="@+id/etsearchinMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/searchhere"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"/>
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true" 
+        android:onClick="OnClickButtonSave"/>
+    -->
+
+    <SearchView
+        android:id="@+id/svMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:iconifiedByDefault="false"
+        android:inputType="text"
+        android:queryHint="@string/searchhere" />
+ 	<Button
+        android:id="@+id/buttonSaveLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="OnClickButtonSave"
+        android:text="@string/savelocation" />
+        
+ 	
+    <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.google.android.gms.maps.SupportMapFragment"/>
+        android:layout_above="@id/buttonSaveLocation"
+        android:layout_below="@id/svMap"
+        class="com.google.android.gms.maps.SupportMapFragment" /> 
+   
+
+</RelativeLayout>
