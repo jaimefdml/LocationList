@@ -1,13 +1,13 @@
 package com.jaimefdml.locationlist;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
@@ -82,62 +82,72 @@ public class LocationService extends IntentService {
 		Double currentLatitude = currentLocation.getLatitude();
 		Double currentLongitude = currentLocation.getLongitude();
 		ContentResolver cr = getContentResolver();
-		String[] projection = { BaseTodoList._ID,
-				BaseTodoList.KEY_NAME,
-				BaseTodoList.KEY_LATITUDE,
-				BaseTodoList.KEY_LONGITUDE,
-				BaseTodoList.KEY_BASKET
-				};
+		String[] projection = { BaseTodoList._ID, BaseTodoList.KEY_NAME,
+				BaseTodoList.KEY_LATITUDE, BaseTodoList.KEY_LONGITUDE,
+				BaseTodoList.KEY_BASKET };
 		Cursor cursor = cr.query(TodoListContentProvider.CONTENT_URI,
 				projection, null, null, BaseTodoList.KEY_BASKET);
-		SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(this);
-		String notifradio = sharedpref.getString(SettingsActivity.KEY_NOTIFICATION_RADIO, "2");
-		
-		
+		SharedPreferences sharedpref = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String nr = sharedpref.getString(
+				SettingsActivity.KEY_NOTIFICATION_RADIO, "2");
+		Integer notifiradio = Integer.parseInt(nr) * 1000;
+
+		// Hay un problema de redundancia de notificaciones.
+		// Mirar en Teambox para la explicación.
+
 		while (cursor.moveToNext()) {
 			Double cursorLat = cursor.getDouble(2);
 			Double cursorLon = cursor.getDouble(3);
-			
+
 			float[] results = new float[3];
-			//Gets the distance between the points
-			Location.distanceBetween(currentLatitude, currentLongitude, cursorLat, cursorLon, results);
+			// Gets the distance between the points
+			Location.distanceBetween(currentLatitude, currentLongitude,
+					cursorLat, cursorLon, results);
 			Float distance = results[0];
-			//If you are nearer than specified distance, throw the notification
-			if (distance < Integer.parseInt(notifradio)) {
+			// If you are nearer than specified distance, throw the notification
+			if (distance < notifiradio) {
 				// Throw status bar notifications
 				// Showing has to buy KEY_NAME.
 				// For the moment, just a Toast.
-				Cursor sameBasketCursor = cr.query(TodoListContentProvider.CONTENT_URI,
-						new String[] {BaseTodoList.KEY_NAME}, 
+				Cursor sameBasketCursor = cr.query(
+						TodoListContentProvider.CONTENT_URI,
+						new String[] { BaseTodoList.KEY_NAME },
 						BaseTodoList.KEY_BASKET + "=?",
-						new String[] {Integer.toString(cursor.getInt(4))}, 
+						new String[] { Integer.toString(cursor.getInt(4)) },
 						null);
-				
-				while(sameBasketCursor.moveToNext()){
-					//Notification:
-					NotificationCompat.Builder notBuilder = 
-					new NotificationCompat.Builder(getApplicationContext())
-					.setContentTitle("Pilla")
-					.setContentText(sameBasketCursor.getString(0))
-					.setSmallIcon(R.drawable.ic_launcher);
-					
-					Intent resultIntent = new Intent(getApplicationContext(),MyListActivity.class);
-					TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-					stackBuilder.addParentStack(MyListActivity.class);
-					stackBuilder.addNextIntent(resultIntent);
-					PendingIntent pendInt = 
-							stackBuilder.getPendingIntent(0,
-							PendingIntent.FLAG_CANCEL_CURRENT);
-					notBuilder.setContentIntent(pendInt);
-					NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-					nm.notify(0, notBuilder.build());
-					
-					
-					
-//					Toast.makeText(getApplication(),
-//							"Get: " + sameBasketCursor.getString(0),
-//							Toast.LENGTH_SHORT).show();
+
+				String elements = "";
+				while (sameBasketCursor.moveToNext()) {
+					// Here just put together all the items from the same
+					// basket.
+					if (sameBasketCursor.isFirst()) {
+						elements = sameBasketCursor.getString(0);
+					} else {
+						elements.concat("\n" + sameBasketCursor.getString(0));
+					}
 				}
+				sameBasketCursor.close();
+				
+
+				// Notification about all the items in the same Basket case.
+				Resources res = getResources();
+				String title = res.getString(R.string.Remember);
+				NotificationCompat.Builder notBuilder = new NotificationCompat.Builder(
+						getApplicationContext()).setContentTitle(title)
+						.setContentText(elements)
+						.setSmallIcon(R.drawable.ic_launcher);
+				Intent resultIntent = new Intent(getApplicationContext(),
+						MyListActivity.class);
+				TaskStackBuilder stackBuilder = TaskStackBuilder
+						.create(getApplicationContext());
+				stackBuilder.addParentStack(MyListActivity.class);
+				stackBuilder.addNextIntent(resultIntent);
+				PendingIntent pendInt = stackBuilder.getPendingIntent(0,
+						PendingIntent.FLAG_CANCEL_CURRENT);
+				notBuilder.setContentIntent(pendInt);
+				NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				nm.notify(0, notBuilder.build());
 				sameBasketCursor.close();
 			}
 

@@ -35,6 +35,7 @@ public class AddElementActivity extends Activity {
 	int result = RESULT_CANCELED;
 	int rcMapActivity = 0;
 	int basketNum = 0;
+	ConnectivityManager cm;
 
 	/*
 	 * Gets the handler of all the UI widgets: two edittexts and two buttons.
@@ -50,7 +51,6 @@ public class AddElementActivity extends Activity {
 		this.etNewDescription = (EditText) findViewById(R.id.etNewDescription);
 		this.buttonLocate = (Button) findViewById(R.id.buttonLocate);
 		this.buttonSave = (Button) findViewById(R.id.buttonSave);
-		
 
 	}
 
@@ -61,6 +61,15 @@ public class AddElementActivity extends Activity {
 	 */
 	public void onResume() {
 		super.onResume();
+		// Must check if there's Internet connection. If not, should notify
+		// about it.
+		cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netinfo = cm.getActiveNetworkInfo();
+		if (!netinfo.isConnected()) {
+			Toast.makeText(getApplicationContext(),
+					"Connect to internet for better performance",
+					Toast.LENGTH_LONG).show();
+		}
 
 	}
 
@@ -70,6 +79,7 @@ public class AddElementActivity extends Activity {
 		getMenuInflater().inflate(R.menu.add_element, menu);
 		return true;
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -77,12 +87,19 @@ public class AddElementActivity extends Activity {
 			Intent settingsIntent = new Intent(this, SettingsActivity.class);
 			startActivity(settingsIntent);
 			return true;
+		case R.id.help:
+			// Throws a Dialog with help.
+
+			return true;
+		case R.id.about:
+			// Throws a Dialog with info about the app.
+			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
 
 		}
-		
+
 	}
 
 	@Override
@@ -94,16 +111,18 @@ public class AddElementActivity extends Activity {
 				latitude = data.getDoubleExtra("Latitude", 0.0);
 				longitude = data.getDoubleExtra("Longitude", 0.0);
 
+			} else if (resultCode == RESULT_CANCELED) {
+				Toast.makeText(this, "Location failed", Toast.LENGTH_LONG)
+						.show();
 			}
-			else if (resultCode==RESULT_CANCELED){
-				Toast.makeText(this, "Location failed", Toast.LENGTH_LONG).show();
-			}
-		}else{
-			Toast.makeText(this, "Where the f**k did you come from?", Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(this, "Where the f**k did you come from?",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 
 	public void onLocateClick(View view) {
+
 		// Checks GPS
 		LocationManager lm = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
@@ -117,19 +136,19 @@ public class AddElementActivity extends Activity {
 		}
 
 		// Checks WiFi
-		ConnectivityManager cm = (ConnectivityManager) this
+		cm = (ConnectivityManager) this
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo wifiinfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		boolean wifi_on = wifiinfo.isAvailable();
-		
+
 		if (gps_on && !wifi_on) {
 			// Activate WIFI
 			// Should throw a Dialog, and open the settings activity.
 			DialogWifi dialogwifi = new DialogWifi();
 			dialogwifi.show(getFragmentManager(), "DIALOG WIFI");
 		}
-		
-		//If GPS and WiFi have been enabled, launches the Map Activity.
+
+		// If GPS and WiFi have been enabled, launches the Map Activity.
 		if (gps_on && wifi_on) {
 			// Launches the map activity which should allow the user
 			// to pick a location.
@@ -140,9 +159,11 @@ public class AddElementActivity extends Activity {
 	}
 
 	public void onSaveClick(View view) {
-		SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(this);
-		String basketradio = sharedpref.getString(SettingsActivity.KEY_BASKET_RADIO, "1");
-		
+		SharedPreferences sharedpref = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String basketradio = sharedpref.getString(
+				SettingsActivity.KEY_BASKET_RADIO, "1");
+
 		ContentResolver cr = getContentResolver();
 		Cursor curBaskets = cr.query(TodoListContentProvider.CONTENT_URI,
 				new String[] { BaseTodoList.KEY_LATITUDE,
@@ -163,7 +184,7 @@ public class AddElementActivity extends Activity {
 			// If the new place is near another one already pointed, both must
 			// be
 			// in the same basket.
-			if (results[0] < Integer.parseInt(basketradio)) {
+			if (results[0] < Integer.parseInt(basketradio) * 1000) {
 				this.basketNum = curBaskets.getInt(2);
 				// To finish looking around the cursor.
 				curBaskets.moveToLast();

@@ -1,3 +1,4 @@
+
 package com.jaimefdml.locationlist;
 
 import android.app.Activity;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.jaimefdml.locationlist.TodoListContentProvider.BaseTodoList;
 
@@ -70,7 +72,14 @@ public class MyListActivity extends Activity implements
 	@Override
 	public void onResume() {
 		super.onResume();
-
+		// Must check if there's Internet connection. If not, should notify about it.
+		ConnectivityManager cm = 
+				(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netinfo = cm.getActiveNetworkInfo();
+		if(!netinfo.isConnected()){
+			Toast.makeText(getApplicationContext(), "Connect to internet for better performance",
+					Toast.LENGTH_LONG).show();
+		}
 		this.lvListToDo.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -87,6 +96,7 @@ public class MyListActivity extends Activity implements
 
 				Cursor cursor = cr.query(locator, projection, null, null, null);
 				if (cursor.getCount() == 1 && cursor.moveToFirst()) {
+					
 					Intent intent = new Intent(getApplication(),
 							ItemDetailsActivity.class);
 					
@@ -139,6 +149,13 @@ public class MyListActivity extends Activity implements
 			Intent settingsIntent = new Intent(this, SettingsActivity.class);
 			startActivity(settingsIntent);
 			return true;
+		case R.id.help:
+			//Throws a Dialog with help.
+			
+			return true;
+		case R.id.about:
+			//Throws a Dialog with info about the app.
+			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
@@ -148,8 +165,7 @@ public class MyListActivity extends Activity implements
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
+	protected void onActivityResult(int requestCode, int resultCode,Intent intent) {
 		if (requestCode == requestCodeOnAddElement) {
 			if (resultCode == RESULT_OK) {
 				reFillData();
