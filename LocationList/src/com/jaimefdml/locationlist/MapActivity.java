@@ -118,13 +118,15 @@ public class MapActivity extends FragmentActivity {
 		// Maybe depending on the basket the places belong to, we could set
 		// different
 		// colors in the icons.
-		while (cursor.moveToNext()) {
+		// Así se salta el primero? Creo que sí
+		cursor.moveToFirst();
+		do {
 			LatLng latlng = new LatLng(cursor.getDouble(1), cursor.getDouble(2));
 			String name = cursor.getString(0);
 			map.addMarker(new MarkerOptions().position(latlng).title(name)
 					.snippet("Touch to set as position of new item")
 					.draggable(false));
-		}
+		} while (cursor.moveToNext());
 
 		/*
 		 * Centers the map view in the last known position, and sets the new

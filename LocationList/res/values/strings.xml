@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LocationList</string>
+    <string name="app_name">QuickSMarkt</string>
     <string name="action_settings">Settings</string>
     <string name="AddElement">Añadir Elemento</string>
     <string name="On">ON</string>

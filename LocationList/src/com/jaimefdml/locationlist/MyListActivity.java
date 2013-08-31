@@ -2,6 +2,8 @@
 package com.jaimefdml.locationlist;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -72,6 +74,13 @@ public class MyListActivity extends Activity implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		/*
+		 * First of all, checks if the service is running.
+		 * If it's running, it sets the swith to on.
+		 */
+		if (isMyServiceRunning()){
+			this.switchService.setChecked(true);
+		}
 		// Must check if there's Internet connection. If not, should notify about it.
 		ConnectivityManager cm = 
 				(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -230,7 +239,8 @@ public class MyListActivity extends Activity implements
 		}
 		if (!switchService.isChecked()) {
 			// When it is deactivated: finish the service.
-			// Toast.makeText(this, "Not Activated", Toast.LENGTH_LONG).show();
+			Intent stopServiceIntent = new Intent(this,LocationService.class);
+			stopService(stopServiceIntent);
 		}
 	}
 
@@ -269,5 +279,13 @@ public class MyListActivity extends Activity implements
 	private void reFillData() {
 		getLoaderManager().restartLoader(LIST_ID, null, this);
 	}
-
+	private boolean isMyServiceRunning() {
+	    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if (LocationService.class.getName().equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 }

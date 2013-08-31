@@ -17,30 +17,25 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ItemDetailsActivity extends FragmentActivity {
-TextView tvItemName;
-TextView tvItemDescription;
-Double itemLatitude;
-Double itemLongitude;
-LatLng latlng;
-GoogleMap map;
-Marker marker;
-MarkerOptions mrkopt;
+	TextView tvItemName;
+	TextView tvItemDescription;
+	Double itemLatitude;
+	Double itemLongitude;
+	LatLng latlng;
+	GoogleMap map;
+	Marker marker;
+	MarkerOptions mrkopt;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_item_details);
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		Intent intent = getIntent();
-		tvItemName=(TextView)findViewById(R.id.tvnameitemdetails);
-		tvItemDescription=(TextView)findViewById(R.id.tvdescriptionitemdetails);
-		itemLatitude = intent.getDoubleExtra("itemLatitude", 0.0);
-		itemLongitude = intent.getDoubleExtra("itemLongitude", 0.0);
-		latlng = new LatLng(itemLongitude,itemLatitude);
-		mrkopt = new MarkerOptions().position(latlng).draggable(false);
-		tvItemName.setText(intent.getStringExtra("itemName"));
-		tvItemDescription.setText(intent.getStringExtra("itemDescription"));
-		
+
+		tvItemName = (TextView) findViewById(R.id.tvnameitemdetails);
+		tvItemDescription = (TextView) findViewById(R.id.tvdescriptionitemdetails);
+
 	}
 
 	@Override
@@ -66,17 +61,24 @@ MarkerOptions mrkopt;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
+		Intent intent = getIntent();
+		itemLatitude = intent.getDoubleExtra("itemLatitude", 0.0);
+		itemLongitude = intent.getDoubleExtra("itemLongitude", 0.0);
+		latlng = new LatLng(itemLongitude, itemLatitude);
+		mrkopt = new MarkerOptions().position(latlng).draggable(false);
+		tvItemName.setText(intent.getStringExtra("itemName"));
+		tvItemDescription.setText(intent.getStringExtra("itemDescription"));
 		map = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.mapitems)).getMap();
 		map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		map.addMarker(mrkopt);
 		CameraUpdate camUp = CameraUpdateFactory.newLatLngZoom(latlng, 12);
 		map.animateCamera(camUp);
-		
+
 	}
 
 }

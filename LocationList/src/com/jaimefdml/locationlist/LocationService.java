@@ -1,8 +1,10 @@
 package com.jaimefdml.locationlist;
 
-import android.app.IntentService;
+import com.jaimefdml.locationlist.TodoListContentProvider.BaseTodoList;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,22 +15,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.jaimefdml.locationlist.TodoListContentProvider.BaseTodoList;
-
-public class LocationService extends IntentService {
-
-	public LocationService() {
-		super("LocationService");
-
-	}
+public class LocationService extends Service {
 
 	@Override
-	protected void onHandleIntent(Intent intent) {
-
+	public int onStartCommand(Intent intent, int flags, int startId) {
 		LocationManager lm = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
 		// Gets the last known location.
@@ -69,7 +64,14 @@ public class LocationService extends IntentService {
 
 		};
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loclis);
+		return Service.START_NOT_STICKY;
 
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	// Methods that checks all the locations in the db with the current
@@ -128,7 +130,6 @@ public class LocationService extends IntentService {
 					}
 				}
 				sameBasketCursor.close();
-				
 
 				// Notification about all the items in the same Basket case.
 				Resources res = getResources();
@@ -153,5 +154,6 @@ public class LocationService extends IntentService {
 
 		}
 		cursor.close();
+
 	}
 }
