@@ -46,11 +46,13 @@ public class MyListActivity extends Activity implements
 	Switch switchService;
 	ListView lvListToDo;
 
-	/*
-	 * Performs the initialization of all the UI widgets: - The Button to Add an
-	 * Element to the list, - The switch to activate or deactivate the service,
-	 * - The List of things to do. (non-Javadoc)
-	 * 
+	/**
+	 * Performs the initialization of all the UI widgets: 
+	 * <ul>
+	 * <li> The Button to Add an
+	 * <li> Element to the list, - The switch to activate or deactivate the service,
+	 * <li> The List of things to do. (non-Javadoc)
+	 * </ul>
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -64,7 +66,7 @@ public class MyListActivity extends Activity implements
 		fillData();
 	}
 
-	/*
+	/**
 	 * Performs all the actions when the user has the activity control: - Fetchs
 	 * all the information from the content provider. - Shows the information in
 	 * the List.
@@ -135,7 +137,7 @@ public class MyListActivity extends Activity implements
 						Uri locator = Uri.parse(uri);
 						cr.delete(locator, null, null);
 
-						// Cómo se refresca el listView??
+						// Cï¿½mo se refresca el listView??
 						reFillData();
 
 						return true;
@@ -256,7 +258,7 @@ public class MyListActivity extends Activity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor data) {
 		mAdapter.swapCursor(data);
-		// Debería de actualizar mi user interface (listView) aquí
+		// Deberï¿½a de actualizar mi user interface (listView) aquï¿½
 
 	}
 
